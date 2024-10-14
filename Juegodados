@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinco dados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+        }
+        .container {
+            margin: 20px auto;
+            width: 300px;
+        }
+        .jugador {
+            padding: 10px;
+            margin: 10px 0;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid black;
+        }
+        .jugador1 {
+            background-color: red;
+        }
+        .jugador2 {
+            background-color: blue;
+        }
+        .dados {
+            font-size: 2em;
+        }
+        .resultado {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<?php
+// Dados representados con caracteres especiales
+$diceFaces = ['&#9856;', '&#9857;', '&#9858;', '&#9859;', '&#9860;', '&#9861;']; // Dados del 1 al 6
+
+// Función para simular la tirada de 6 dados
+function tirarDados() {
+    $dados = [];
+    for ($i = 0; $i < 6; $i++) {
+        $dados[] = rand(1, 6); // Genera números aleatorios entre 1 y 6
+    }
+    return $dados;
+}
+
+// Función para calcular la puntuación eliminando el dado más alto y el más bajo
+function calcularPuntuacion($dados) {
+    // Eliminar el dado más alto y el más bajo
+    sort($dados); // Ordenamos los dados de menor a mayor
+    array_shift($dados); // Eliminamos el menor
+    array_pop($dados); // Eliminamos el mayor
+
+    // Calcular la suma de los dados restantes
+    return array_sum($dados);
+}
+
+// Función para mostrar los dados como caracteres especiales
+function mostrarDados($dados) {
+    global $diceFaces; // Usamos la variable global $diceFaces
+    $result = "";
+    foreach ($dados as $dado) {
+        $result .= $diceFaces[$dado - 1] . " "; // Muestra el carácter del dado correspondiente
+    }
+    return $result;
+}
+
+// Tiradas de los jugadores
+$dadosRojo = tirarDados();
+$dadosAzul = tirarDados();
+
+// Calculamos las puntuaciones
+$puntuacionRojo = calcularPuntuacion($dadosRojo);
+$puntuacionAzul = calcularPuntuacion($dadosAzul);
+
+// Mostramos el título del juego
+echo "<h1>Cinco dados</h1>";
+echo "<p>Actualice la página para mostrar una nueva tirada.</p>";
+
+echo "<div class='container'>";
+
+// Jugador 1 (Rojo)
+echo "<div class='jugador jugador1'>";
+echo "<div>Jugador 1</div>";
+echo "<div class='dados'>" . mostrarDados($dadosRojo) . "</div>";
+echo "<div>" . $puntuacionRojo . " puntos</div>";
+echo "</div>";
+
+// Jugador 2 (Azul)
+echo "<div class='jugador jugador2'>";
+echo "<div>Jugador 2</div>";
+echo "<div class='dados'>" . mostrarDados($dadosAzul) . "</div>";
+echo "<div>" . $puntuacionAzul . " puntos</div>";
+echo "</div>";
+
+// Resultado del juego
+echo "<div class='resultado'>";
+if ($puntuacionRojo > $puntuacionAzul) {
+    echo "Ha Ganado el Jugador 1";
+} elseif ($puntuacionAzul > $puntuacionRojo) {
+    echo "Ha Ganado el Jugador 2";
+} else {
+    echo "¡Es un empate!";
+}
+echo "</div>";
+
+echo "</div>";
+?>
+
+</body>
+</html>
